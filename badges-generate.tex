@@ -1,0 +1,97 @@
+%%%%
+%
+% Modification of the original ticket.sty example file for a pin for conferences
+%
+% Notes :
+% * Your participant's detailed list should be in a file named "inscriptions.csv" at the same level as this file
+% The cvs first line is supposed to match the following :
+% Name, Type, Red, Blue, Green, Yellow
+%
+% * The icons used are stored in the current directory :
+% red.png, blue.png, green.png, yellow.png
+%
+%
+%
+% * The background image is stored in background.png; it represent the full badge pin (1063px*591px)
+% it is currently set to be slightly cropped on the side, and set to 75% opacity
+% 
+% * You want to modify the name, place and date of the event  by modifying  the lines :
+%  \put( 7, 8){\scriptsize \color{myColor}Festival\color{black}}
+ % \put( 7, 5){\scriptsize \color{myColor}Where? \color{black}}
+ % \put( 7, 2){\scriptsize \color{myColor}dd/mm/yy\color{black}}
+ %
+ % * You can modify the event color my entering the RGB value in the line :
+% \definecolor{myColor}{rgb}{1, 0.322, 0}
+% it is currently set to a dark orange.
+% 
+%%%%
+
+% use the corresponding paper size for your ticket definition
+\documentclass[a4paper,10pt]{letter}
+
+% load ticket.sty with the appropriate ticket definition
+\usepackage[freepin,crossmark]{ticket}
+%\unitlength=1mm
+%
+%     \hoffset=-20mm
+%     \voffset=-10mm
+%
+%
+%     \ticketNumbers{2}{5}
+%     \ticketSize{1}{56.5}     % in unitlength
+%     \ticketDistance{0}{9.8}    % in unitlength
+
+% for managing source for names and characteristics
+\usepackage{datatool}
+\usepackage[utf8x]{inputenc}
+% load misc stuff
+\usepackage{transparent}
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage{xcolor}
+\definecolor{myColor}{rgb}{1, 0.322, 0}
+
+% make your default ticket. \ticketdefault is somewhat like a background
+\renewcommand{\ticketdefault}{
+%Inset the background image, with 0.75/1 = 75% opacity
+  \put(0,  3){\transparent{0.75}\includegraphics[width=80mm]{background}} 
+  \put( 5, 13){\line(1,0){63}}
+  \put( 7, 8){\scriptsize \color{myColor}Festival\color{black}}
+  \put( 7, 5){\scriptsize \color{myColor}Where? \color{black}}
+  \put( 7, 2){\scriptsize \color{myColor}dd/mm/yy\color{black}}
+}
+
+% now what do you like to put in your ticket
+\newcommand{\confpin}[6]{\ticket{%
+%\ifthenelse{\equal{#3}{}}{Empty.png}{Nonempty.}
+    \put(35,36){\makebox[0mm]{\bfseries\LARGE #1}}
+    \put(35,28){\makebox[0mm]{\bfseries\large #2}}
+    % If there is anything in the matching column, then print the icon selected  (files in name.png ) 
+    \put(25,1){\makebox[0mm]{ \ifthenelse{\equal{#3}{}}{}{\includegraphics[width=10mm,height=10mm]{red}} }} % location/name for "red" option icon
+    \put(37,1){\makebox[0mm]{ \ifthenelse{\equal{#4}{}}{}{\includegraphics[width=10mm,height=10mm]{blue}} }}
+    \put(49,1){\makebox[0mm]{ \ifthenelse{\equal{#5}{}}{}{\includegraphics[width=10mm,height=10mm]{green}} }}
+    \put(61,1){\makebox[0mm]{ \ifthenelse{\equal{#6}{}}{}{\includegraphics[width=10mm,height=10mm]{yellow}} }}
+}}
+
+
+%% the pins for the partipiciants.
+\begin{document}
+\sffamily
+
+% here you load your cvs file, formatted with commas ( , ) and without any double quotes in the whole cvs file ( " ) 
+\DTLloaddb{namecard}{inscriptions.csv}
+
+% NB: The cvs first line is supposed to match the following :
+% Name, Type, Red, Blue, Green, Yellow
+
+% Here, we analyze a line (note the match with the cvs column titles
+% put the value for the given participant, and then generate the pin "badge" 
+\DTLforeach{namecard}{\name=Name,
+	\typeUser=Type,
+	\optionA=Red,
+	\optionB=Blue,
+	\optionC=Green,
+	\optionD=Yellow}
+	{\confpin{\name}{\typeUser}{\optionA}{\optionB}{\optionC}{\optionD}}
+
+\end{document}
