@@ -1,9 +1,8 @@
 # latexBadges
-Generate beautiful badges for any event with this easy LaTeX file &amp; csv.
+Generate beautiful badges for any event with this easy LaTeX file &amp; csv and set of icons.
 
 
-
-# HOW TO :
+## HOW TO USE IT :
 * Your participant's detailed list should be in a file named "inscriptions.csv" at the same level as this file
  The cvs first line is supposed to match the following :
 
@@ -16,7 +15,10 @@ red.png, blue.png, green.png, yellow.png
 
 
 * The background image is stored in background.png; it represent the full badge pin (1063px*591px)
-it is currently set to be slightly cropped on the side, and set to 75% opacity
+it is currently set to 75% opacity, this can me modified here 
+
+\transparent{0.75}
+ 
  
 * You want to modify the name, place and date of the event  by modifying  the lines :
 
@@ -33,7 +35,7 @@ it is currently set to be slightly cropped on the side, and set to 75% opacity
 
 it is currently set to a dark orange.
 
-# References :
+## References :
 * LaTeX modified from https://tex.stackexchange.com/questions/94582/automating-the-creation-of-name-badges-for-an-event
 * Icons and background made with Gimp.
 * Data generated with http://www.generatedata.com/
